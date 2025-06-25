@@ -1,0 +1,40 @@
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
+    background-color: rgb(0, 24, 79);
+    background: linear-gradient(180deg, rgb(0, 24, 79), rgb(0, 33, 61), 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+.main {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    
+    font-family: 'Open Sans', sans-serif;
+}
+
+.main div {
+    margin: 20px 0px;
+}
+
+.main div p {
+    font-size: larger;
+}
+
+.main h1, h2 {
+    color: #f5f5f5;
+    margin: 5px 0px;
+}
+
+.main a, p {
+    color: #b4b4b4;
+    margin: 5px 0px;
+}
