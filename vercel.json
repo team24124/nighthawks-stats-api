@@ -2,10 +2,10 @@
   "version": 2,
   "builds": [{"src":  "run.py", "use": "@vercel/python"}],
   "routes": [{"src": "/(.*)", "dest": "run.py"}],
-  "cron": [
+  "crons": [
     {
       "path": "/api/cron/update",
-      "cron": "0 0 * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }
