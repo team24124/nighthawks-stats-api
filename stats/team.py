@@ -1,12 +1,15 @@
 # Create team object to store information
 class Team:
     def __init__(self, team_number, name, country, state_prov, city, home_region):
-        self.games_played = 0
         self.team_number = team_number
         self.name = name
 
         # Rankings at each event
         self.rankings = {}
+
+        # List of all matches played in consecutive order
+        self.matches = []
+        self.games_played = len(self.matches)
 
         self.country = country
         self.state_prov = state_prov
@@ -31,10 +34,12 @@ class Team:
     def update_event_rank(self, event_code, event_rank):
         self.rankings[event_code] = event_rank
 
+    def update_game_played(self, match_name):
+        self.matches.append(match_name)
+
     def update_epa(self, new_epa):
         self.epa_total = new_epa
         self.historical_epa.append(new_epa)
-        self.games_played+=1
 
     def update_auto_epa(self, new_epa_auto):
       self.epa_auto_total = new_epa_auto

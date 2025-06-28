@@ -1,0 +1,9 @@
+# Season for making calls to the API, different seasons return different json responses. (2024 -> Into the Deeep)
+season: 2024
+
+# Settings for determining start of season averages for EPA calculation
+calculate_averages: False
+averages:
+  overall: 27.874032614704255
+  auto: 3.9717385295743504
+  teleop: 19.507600884466555

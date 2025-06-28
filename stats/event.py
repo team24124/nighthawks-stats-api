@@ -1,18 +1,21 @@
-from typing import List
+from telnetlib import NOOPT
+from typing import List, Set
 
 import requests
 from datetime import datetime
+
+from pytz import all_timezones_set
+
 from stats.data import get_auth
 from stats.team import Team
+from stats.config import config
 
 class Event:
-  def __init__(self, event_code, event, season):
+  def __init__(self, event):
     """
-    :param event_code: FTC Event Code
     :param event: JSON response from FTC API for that event
-    :param season: Valid season
     """
-    self.event_code = event_code
+    self.event_code = event['code']
     self.name = event['name']
 
     # Location Info
@@ -20,16 +23,19 @@ class Event:
     self.state_province = event['stateprov']
     self.city = event['city']
 
-    self.team_list = create_team_list(event_code, season)
+    self.team_list = create_team_list(event['code'])
 
-def create_team_list(event_code, season):
+  def __repr__(self):
+    return f"{self.event_code, self.name}"
+
+def create_team_list(event_code):
   """
   Retrieves the team list from a given event code
-  :param season: Four digit year representing the season
   :param event_code: FIRST Event Code
   :return:
     Dictionary of team objects
   """
+  season = config['season']
 
   team_response = requests.get(f"https://ftc-api.firstinspires.org/v2.0/{season}/teams?eventCode="+event_code, auth=get_auth())
   teams_at_comp = team_response.json()['teams']
@@ -58,33 +64,15 @@ def create_team_list(event_code, season):
 
   return teams
 
-def validate_event(event_code, season) -> Event | None:
-  """
-  Validate whether a given event code exists in the current season and return an event object
-  :param season: Four digit year representing the season
-  :param event_code: An event code to test
-  :return: An event object if the code is valid, none otherwise
-  """
-  if event_code == "": # Return false if empty
-    return None
 
-  event_response = requests.get(f"http://ftc-api.firstinspires.org/v2.0/{season}/events?eventCode="+event_code,
-                                auth=get_auth())
-
-  if event_response.status_code == 404: # Return false if 404 not found
-    return None
-
-  event = event_response.json()['events'][0]
-  return Event(event_code, event, season)
-
-def get_all_events_by_teams(teams: List[str], season):
+def get_all_events_by_teams(teams: List[str]):
   """
     Get all events played in from a list of teams
-    :param season: Four digit year representing the season
     :param teams: A list of team numbers as strings
     :return: A list of objects containing the start date and event code of all events sorted from earliest to latest
     """
   valid_event = [1, 2, 3, 4, 6, 7, 17]
+  season = config['season']
 
   event_codes = [] # Set of (event_date, event_code) objects
   event_dates = []
