@@ -1,6 +1,8 @@
+from datetime import date
+
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column
+from sqlalchemy import Column, DateTime
 from sqlalchemy.types import ARRAY, String, Integer, Float
 from flask_restful import fields
 
@@ -9,6 +11,11 @@ from stats.event import Event
 from stats.team import Team
 
 #from stats.team import Team
+
+meta_data_fields = {
+    'id': fields.Integer,
+    'last_updated': fields.DateTime
+}
 
 team_model_fields = {
     'team_number': fields.Integer,
@@ -129,3 +136,8 @@ class TeamModel(db.Model):
 
     def __repr__(self):
         return f"Team(number={self.team_number},name={self.team_name})"
+
+
+class AppMetaData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    last_updated = Column(db.DateTime, nullable=False, default=date.today().isoformat(), onupdate=date.today().isoformat())

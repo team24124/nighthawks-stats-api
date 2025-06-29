@@ -12,7 +12,7 @@ class Team:
 
         # List of all matches played in consecutive order
         self.matches = []
-        self.games_played = len(self.matches)
+        self.games_played = 0
 
         self.country = country
         self.state_prov = state_prov
@@ -50,12 +50,14 @@ class Team:
         self.opr_tele_vals = data['historical_tele_opr']
         self.opr_end_vals = data['historical_end_opr']
         self.matches = data['matches']
+        self.games_played = data['games_played']
 
     def update_event_rank(self, event_code, event_rank):
         self.rankings[event_code] = event_rank
 
     def update_game_played(self, match_name):
         self.matches.append(match_name)
+        self.games_played += 1
 
     def update_epa(self, new_epa):
         self.epa_total = new_epa

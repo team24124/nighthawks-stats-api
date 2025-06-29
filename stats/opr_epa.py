@@ -275,7 +275,7 @@ def process_event(event_code: str, avg_total: float, avg_auto: float, avg_teleop
 
 
 def update_epa_opr_to_today(last_updated: datetime):
-    today = datetime.today()
+    today = datetime.now()
     events = get_all_events()
     new_events = []
     teams = {}
@@ -284,12 +284,12 @@ def update_epa_opr_to_today(last_updated: datetime):
         iso_date = event[0]
         event_code = event[1]
 
-        date = datetime.fromisoformat(iso_date)
+        date = datetime.fromisoformat(iso_date).date()
 
-        if last_updated <= date < today:
+        if last_updated.date() <= date < today.date():
             new_events.append(event_code)
             for team_number, team_obj in create_team_list(event_code).items():
-                res = requests.get(f"https://nighthawks-stats-eight.vercel.app/api/teams/{team_number}/")
+                res = requests.get(f"https://nighthawks-stats.vercel.app/api/teams/{team_number}/")
                 if res.status_code != 404:
                     team_data = res.json()
                     team_obj.update(team_data)

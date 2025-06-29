@@ -1,10 +1,17 @@
+import datetime
+
 from flask import render_template
 from flask_restful import Resource, marshal_with, abort
-from app.models import TeamModel, team_model_fields, event_model_fields, EventModel
+from app.models import TeamModel, team_model_fields, event_model_fields, EventModel, AppMetaData, meta_data_fields
 
 from app import app, api, db
-from stats.opr_epa import calculate_world_epa_opr
+from stats.data import parse_date
+from stats.opr_epa import calculate_world_epa_opr, update_epa_opr_to_today
 
+class MetaData(Resource):
+    @marshal_with(meta_data_fields)
+    def get(self):
+        return AppMetaData.query.get(0)
 
 class Teams(Resource):
     @marshal_with(team_model_fields)
@@ -36,7 +43,7 @@ class Event(Resource):
 def index():
     return render_template('index.html')
 
-@app.route('/api/cron/update')
+@app.route('/api/calculate')
 def update():
     with app.app_context():
         #Calculate all statistics
@@ -56,9 +63,34 @@ def update():
                     query.update(team)
 
         db.session.commit()
+        print("All changes comitted.")
+    return "", 204
+
+@app.route('/api/cron/update')
+def update_daily():
+    with app.app_context():
+        metadata = AppMetaData.query.get(0)
+        last_updated = metadata.last_updated
+        teams = update_epa_opr_to_today(last_updated)
+
+        with db.session.no_autoflush:
+            for team in teams.values():
+                model_obj = TeamModel(team)
+                query: TeamModel = TeamModel.query.filter_by(team_number=team.team_number).first()
+
+                if not query:
+                    print(f"Found new team ({team.team_number}), adding to database.")
+                    db.session.add(model_obj)
+                else:
+                    print(f"Updating existing team. ({team.team_number})")
+                    query.update(team)
+
+        metadata.last_updated = datetime.datetime.now()
+        db.session.commit()
     return "", 204
 
 api.add_resource(Teams, '/api/teams/')
 api.add_resource(Team, '/api/teams/<int:team_number>/')
-api.add_resource(Events, '/api/events')
+api.add_resource(Events, '/api/events/')
 api.add_resource(Event, '/api/events/<string:event_code>/')
+api.add_resource(MetaData, '/api/info/')
