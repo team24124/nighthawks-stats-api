@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import Dict
+
 import requests
 from stats.data import get_auth
 from stats.event import create_team_list, get_all_events, get_all_events_by_teams
@@ -98,62 +101,7 @@ def calculate_epa_opr(events, region_code=""):
     event_codes = [event[1] for event in events] # get event codes from tuple
 
     for event in event_codes:
-        team_list = create_team_list(event) # List of team numbers needed
-        team_number_list =  []
-        print(f"Processing {len(team_list.values())} teams from event: {event}")
-        for team_number in team_list:
-            team = team_list[team_number]
-            team_number_list.append(team.team_number)
-            team.update_game_played("START")
-            team.update_epa(avg_total)
-            team.update_auto_epa(avg_auto)
-            team.update_tele_epa(avg_teleop)
-
-            if team_number not in all_teams.keys():
-                all_teams[team.team_number] = team
-
-            if event in team.rankings:
-                all_teams[team.team_number].update_event_rank(event, team.rankings[event])
-        game_matrix = create_game_matrix(event, team_number_list)
-
-        if len(game_matrix) > 0:  # skip events with no games
-            # Get relevant scoring data from the event
-            match_names, total_match_score, auto_match_score, tele_match_score, end_match_score = obtain_score_data(season, event)
-
-            # Calculate OPR
-            total_opr = np.linalg.lstsq(game_matrix, total_match_score)[0]
-            auto_opr = np.linalg.lstsq(game_matrix, auto_match_score)[0]
-            tele_opr = np.linalg.lstsq(game_matrix, tele_match_score)[0]
-            end_opr = np.linalg.lstsq(game_matrix, end_match_score)[0]
-
-            for i in range(len(team_number_list)):
-                team_number = team_number_list[i] # Use team number from team list to get team
-                team_obj = all_teams[team_number]
-                team_obj.update_opr(total_opr[i], auto_opr[i], tele_opr[i], end_opr[i])
-
-            # Calculate EPA
-            game_index = 0
-            for i in range(0, len(game_matrix), 2):
-                red_index = np.where(np.array(game_matrix[i]) == 1)[0]
-                team1 = all_teams[team_number_list[red_index[0]]]
-                team2 = all_teams[team_number_list[red_index[1]]]
-
-                blue_index = np.where(np.array(game_matrix[i+1]) == 1)[0]
-                team3 = all_teams[team_number_list[blue_index[0]]]
-                team4 = all_teams[team_number_list[blue_index[1]]]
-
-                # Use i as the index the red alliances score, therefore i+1 will be the index of the blue alliances'
-                team1.update_game_played(match_names[game_index])
-                team2.update_game_played(match_names[game_index])
-                team3.update_game_played(match_names[game_index])
-                team4.update_game_played(match_names[game_index])
-                update_epa(team1, team2, team3, team4, total_match_score[i], total_match_score[i+1])
-                update_epa_auto(team1, team2, team3, team4, auto_match_score[i], auto_match_score[i+1])
-                update_epa_tele(team1, team2, team3, team4, tele_match_score[i],  tele_match_score[i+1])
-
-                game_index += 1
-
-
+        process_event(event, avg_total, avg_auto, avg_teleop, all_teams)
 
     return all_teams
 
@@ -260,3 +208,109 @@ def update_epa_tele(team_red_1: Team, team_red_2: Team, team_blue_1: Team, team_
     team_red_2.update_tele_epa(team_red_2.epa_tele_total + delta_epa_red)
     team_blue_1.update_tele_epa(team_blue_1.epa_tele_total + delta_epa_blue)
     team_blue_2.update_tele_epa(team_blue_2.epa_tele_total + delta_epa_blue)
+
+def process_event(event_code: str, avg_total: float, avg_auto: float, avg_teleop:float, all_teams: Dict[str, Team]):
+    season = config['season']
+    team_list = create_team_list(event_code)  # List of team numbers needed
+    team_number_list = []
+    print(f"Processing {len(team_list.values())} teams from event: {event_code}")
+    for team_number in team_list:
+        team = team_list[team_number]
+        team_number_list.append(team.team_number)
+        team.update_game_played("START")
+        team.update_epa(avg_total)
+        team.update_auto_epa(avg_auto)
+        team.update_tele_epa(avg_teleop)
+
+        # Add the newly created team if they don't already exxist
+        if team_number not in all_teams.keys():
+            all_teams[team.team_number] = team
+
+        # If this event is in the newly created teams rankings, update their ranking in our representation
+        if event_code in team.rankings:
+            all_teams[team.team_number].update_event_rank(event_code, team.rankings[event_code])
+    game_matrix = create_game_matrix(event_code, team_number_list)
+
+    if len(game_matrix) > 0:  # skip events with no games
+        # Get relevant scoring data from the event
+        match_names, total_match_score, auto_match_score, tele_match_score, end_match_score = obtain_score_data(season,
+                                                                                                                event_code)
+
+        # Calculate OPR
+        total_opr = np.linalg.lstsq(game_matrix, total_match_score)[0]
+        auto_opr = np.linalg.lstsq(game_matrix, auto_match_score)[0]
+        tele_opr = np.linalg.lstsq(game_matrix, tele_match_score)[0]
+        end_opr = np.linalg.lstsq(game_matrix, end_match_score)[0]
+
+        for i in range(len(team_number_list)):
+            team_number = team_number_list[i]  # Use team number from team list to get team
+            team_obj = all_teams[team_number]
+            team_obj.update_opr(total_opr[i], auto_opr[i], tele_opr[i], end_opr[i])
+
+        # Calculate EPA
+        game_index = 0
+        for i in range(0, len(game_matrix), 2):
+            red_index = np.where(np.array(game_matrix[i]) == 1)[0]
+            team1 = all_teams[team_number_list[red_index[0]]]
+            team2 = all_teams[team_number_list[red_index[1]]]
+
+            blue_index = np.where(np.array(game_matrix[i + 1]) == 1)[0]
+            team3 = all_teams[team_number_list[blue_index[0]]]
+            team4 = all_teams[team_number_list[blue_index[1]]]
+
+            if match_names[game_index] in team1.matches: # Check if this match has already been processed as a precaution
+                game_index += 1
+                continue
+
+            # Use i as the index the red alliances score, therefore i+1 will be the index of the blue alliances'
+            team1.update_game_played(match_names[game_index])
+            team2.update_game_played(match_names[game_index])
+            team3.update_game_played(match_names[game_index])
+            team4.update_game_played(match_names[game_index])
+            update_epa(team1, team2, team3, team4, total_match_score[i], total_match_score[i + 1])
+            update_epa_auto(team1, team2, team3, team4, auto_match_score[i], auto_match_score[i + 1])
+            update_epa_tele(team1, team2, team3, team4, tele_match_score[i], tele_match_score[i + 1])
+
+            game_index += 1
+
+
+def update_epa_opr_to_today(last_updated: datetime):
+    today = datetime.today()
+    events = get_all_events()
+    new_events = []
+    teams = {}
+
+    for event in events:
+        iso_date = event[0]
+        event_code = event[1]
+
+        date = datetime.fromisoformat(iso_date)
+
+        if last_updated <= date < today:
+            new_events.append(event_code)
+            for team_number, team_obj in create_team_list(event_code).items():
+                res = requests.get(f"https://nighthawks-stats-eight.vercel.app/api/teams/{team_number}/")
+                if res.status_code != 404:
+                    team_data = res.json()
+                    team_obj.update(team_data)
+                teams[team_number] = team_obj
+
+    print(new_events)
+    # Calculate Averages
+    if config['calculate_averages']:
+        early_events = get_all_events()
+
+        from stats.averages import calculate_start_avg
+        avg_total, avg_auto, avg_teleop = calculate_start_avg(early_events)
+    else:
+        avg_total = config['averages']['overall']
+        avg_auto = config['averages']['auto']
+        avg_teleop = config['averages']['teleop']
+
+    for event_code in new_events:
+        process_event(event_code, avg_total, avg_auto, avg_teleop, teams)
+
+    return teams
+    # Loop through each event and call process_event
+    # Return the newly updated teams list to be comitted
+    #TODO: ADD END DATE TO EVENT

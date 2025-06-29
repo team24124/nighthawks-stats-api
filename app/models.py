@@ -18,6 +18,7 @@ team_model_fields = {
     'city': fields.String,
     'home_region': fields.String,
     'games_played': fields.Integer,
+    'matches': fields.List(fields.String),
 
     'epa_total': fields.Float,
     'auto_epa_total': fields.Float,
@@ -77,6 +78,7 @@ class TeamModel(db.Model):
     city = Column(String)
     home_region = Column(String)
     games_played = Column(Integer)
+    matches = Column(ARRAY(String))
 
     # EPA
     epa_total = Column(Float)
@@ -107,6 +109,7 @@ class TeamModel(db.Model):
         self.city = team.city
         self.home_region = team.home_region
         self.games_played = team.games_played
+        self.matches = team.matches
 
         self.epa_total = team.epa_total
         self.auto_epa_total = team.epa_auto_total

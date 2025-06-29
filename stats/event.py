@@ -129,7 +129,7 @@ def get_all_events(region_code:str=""):
 
     if int(event['type']) in valid_event: # filter out events like kickoff, workshop, etc.
       event_codes.append(event['code'])
-      event_date.append(event['dateStart'])
+      event_date.append(event['dateEnd'])
 
   # Combine, sort by date
   combined = list(zip(event_date, event_codes))

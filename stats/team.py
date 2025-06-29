@@ -1,4 +1,7 @@
 # Create team object to store information
+from typing import Dict
+
+
 class Team:
     def __init__(self, team_number, name, country, state_prov, city, home_region):
         self.team_number = team_number
@@ -30,6 +33,23 @@ class Team:
         self.opr_auto = 0
         self.opr_tele = 0
         self.opr_end = 0
+
+    def update(self, data: Dict):
+        self.epa_total = data['epa_total']
+        self.epa_auto_total = data['auto_epa_total']
+        self.epa_tele_total = data['tele_epa_total']
+        self.historical_epa = data['historical_epa']
+        self.historical_auto_epa = data['historical_auto_epa']
+        self.historical_tele_epa = data['historical_tele_epa']
+        self.opr = data['opr']
+        self.opr_auto = data['opr_auto']
+        self.opr_tele = data['opr_tele']
+        self.opr_end = data['opr_end']
+        self.opr_total_vals = data['historical_opr']
+        self.opr_auto_vals = data['historical_auto_opr']
+        self.opr_tele_vals = data['historical_tele_opr']
+        self.opr_end_vals = data['historical_end_opr']
+        self.matches = data['matches']
 
     def update_event_rank(self, event_code, event_rank):
         self.rankings[event_code] = event_rank

@@ -40,7 +40,7 @@ def index():
 def update():
     with app.app_context():
         #Calculate all statistics
-        teams = calculate_world_epa_opr(season=2024)
+        teams = calculate_world_epa_opr()
 
         # Loop through all teams and add/update teams
         with db.session.no_autoflush:
