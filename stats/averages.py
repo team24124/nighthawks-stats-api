@@ -15,7 +15,7 @@ def calculate_start_avg(events):
 
     for event in events:
         iso_date = event[0]
-        event_code = event[1]
+        event_code = event[1]['code']
 
         date = datetime.fromisoformat(iso_date)
         if date.month == 11 or date.month == 10:  # Find events in October (10) or November (11)

@@ -6,6 +6,7 @@ from app.models import TeamModel, team_model_fields, event_model_fields, EventMo
 
 from app import app, api, db
 from stats.data import parse_date
+from stats.event import get_all_events, Event as EventObj
 from stats.opr_epa import calculate_world_epa_opr, update_epa_opr_to_today
 
 class MetaData(Resource):
@@ -43,8 +44,30 @@ class Event(Resource):
 def index():
     return render_template('index.html')
 
-@app.route('/api/calculate')
-def update():
+@app.route('/api/events/calculate')
+def update_events():
+    with app.app_context():
+        events = get_all_events()
+
+        with db.session.no_autoflush:
+            for event in events:
+                event_obj = EventObj(event[1])
+                model_obj = EventModel(event_obj)
+                query: EventModel = EventModel.query.filter_by(event_code=event_obj.event_code).first()
+
+                if not query:
+                    print(f"Found new event ({event_obj.event_code}), adding to database.")
+                    db.session.add(model_obj)
+                else:
+                    print(f"Updating existing team. ({event_obj.event_code})")
+                    query.update(event_obj)
+
+        db.session.commit()
+        print("All changes comitted.")
+    return "", 204
+
+@app.route('/api/teams/calculate')
+def update_teams():
     with app.app_context():
         #Calculate all statistics
         teams = calculate_world_epa_opr()
@@ -71,9 +94,21 @@ def update_daily():
     with app.app_context():
         metadata = AppMetaData.query.get(0)
         last_updated = metadata.last_updated
-        teams = update_epa_opr_to_today(last_updated)
+        new_events, teams = update_epa_opr_to_today(last_updated)
 
         with db.session.no_autoflush:
+            for event in new_events:
+                event_obj = EventObj(event)
+                model_obj = EventModel(event_obj)
+                query: EventModel = EventModel.query.filter_by(event_code=event_obj.event_code).first()
+
+                if not query:
+                    print(f"Found new event ({event_obj.event_code}), adding to database.")
+                    db.session.add(model_obj)
+                else:
+                    print(f"Updating existing team. ({event_obj.event_code})")
+                    query.update(event_obj)
+
             for team in teams.values():
                 model_obj = TeamModel(team)
                 query: TeamModel = TeamModel.query.filter_by(team_number=team.team_number).first()

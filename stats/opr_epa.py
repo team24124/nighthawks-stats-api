@@ -98,7 +98,7 @@ def calculate_epa_opr(events, region_code=""):
         avg_teleop = config['averages']['teleop']
         print(f"Using predetermined averages ({avg_total}, {avg_auto}, {avg_teleop})")
 
-    event_codes = [event[1] for event in events] # get event codes from tuple
+    event_codes = [event[1]['code'] for event in events] # get event codes from tuple
 
     for event in event_codes:
         process_event(event, avg_total, avg_auto, avg_teleop, all_teams)
@@ -275,19 +275,25 @@ def process_event(event_code: str, avg_total: float, avg_auto: float, avg_teleop
 
 
 def update_epa_opr_to_today(last_updated: datetime):
+    """
+    Finds and calculates statistics for all events between a given datetime and the time the function is called.
+    Uses preexisting statistics found via API call.
+    :param last_updated: Lowerbound datetime to find events
+    :return: Tuple of the list of processed events, and team statistics
+    """
     today = datetime.now()
     events = get_all_events()
     new_events = []
     teams = {}
 
     for event in events:
-        iso_date = event[0]
-        event_code = event[1]
+        iso_date = event[1]['dateEnd']
+        event_code = event[1]['code']
 
         date = datetime.fromisoformat(iso_date).date()
 
         if last_updated.date() <= date < today.date():
-            new_events.append(event_code)
+            new_events.append(event[1])
             for team_number, team_obj in create_team_list(event_code).items():
                 res = requests.get(f"https://nighthawks-stats.vercel.app/api/teams/{team_number}/")
                 if res.status_code != 404:
@@ -307,10 +313,12 @@ def update_epa_opr_to_today(last_updated: datetime):
         avg_auto = config['averages']['auto']
         avg_teleop = config['averages']['teleop']
 
-    for event_code in new_events:
+    # Process events
+    for event in new_events:
+        event_code = event['code']
         process_event(event_code, avg_total, avg_auto, avg_teleop, teams)
 
-    return teams
+    return new_events, teams
     # Loop through each event and call process_event
     # Return the newly updated teams list to be comitted
     #TODO: ADD END DATE TO EVENT

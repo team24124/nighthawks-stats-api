@@ -23,6 +23,9 @@ class Event:
     self.state_province = event['stateprov']
     self.city = event['city']
 
+    self.dateStart = event['dateStart']
+    self.dateEnd = event['dateEnd']
+
     self.team_list = create_team_list(event['code'])
 
   def __repr__(self):
@@ -74,7 +77,7 @@ def get_all_events_by_teams(teams: List[str]):
   valid_event = [1, 2, 3, 4, 6, 7, 17]
   season = config['season']
 
-  event_codes = [] # Set of (event_date, event_code) objects
+  event_objs = []
   event_dates = []
 
   print(f"Retrieving events from {len(teams)} teams")
@@ -83,20 +86,19 @@ def get_all_events_by_teams(teams: List[str]):
                                   auth=get_auth())
     events = event_response.json().get('events', [])
     print(f"Finding events from {team_number} ")
-    if all(event in event_codes for event in events):
+    if all(event in event_objs for event in events):
       continue
 
     for event in events:
       if int(event['type']) in valid_event:
-        event_code = event['code']
         event_date = event['dateStart']
 
-        if event_code not in event_codes:
-          event_codes.append(event_code)
+        if event not in event_objs:
+          event_objs.append(event)
           event_dates.append(event_date)
 
   # Combine, sort by date
-  combined = list(zip(event_dates, event_codes))
+  combined = list(zip(event_dates, event_objs))
   combined.sort(key=lambda x: datetime.fromisoformat(x[0]))
 
   return combined
@@ -106,7 +108,7 @@ def get_all_events(region_code:str=""):
   """
   Get all events
   :param region_code: OPTIONAL region code to filter by
-  :return: A list of objects containing the start date and event code of all events sorted from earliest to latest
+  :return: A list of objects containing the start date and an event json response of all events sorted from earliest to latest
   """
   # List of valid event types
   # 1 = League Meet, 2 = Qualifier, 3 = League Tournament,
@@ -116,10 +118,11 @@ def get_all_events(region_code:str=""):
   # 17 = Premier
   valid_event = [1, 2, 3, 4, 6, 7, 17]
 
+  print(f"Retrieving all events.")
   event_response = requests.get("http://ftc-api.firstinspires.org/v2.0/2024/events", auth=get_auth())
   events = event_response.json().get('events', [])
 
-  event_codes = []
+  event_objs = []
   event_date = []
 
   for event in events:
@@ -128,11 +131,12 @@ def get_all_events(region_code:str=""):
       continue
 
     if int(event['type']) in valid_event: # filter out events like kickoff, workshop, etc.
-      event_codes.append(event['code'])
-      event_date.append(event['dateEnd'])
+      print(f"Found event. ({event['code']})")
+      event_objs.append(event)
+      event_date.append(event['dateStart'])
 
   # Combine, sort by date
-  combined = list(zip(event_date, event_codes))
+  combined = list(zip(event_date, event_objs))
   combined.sort(key=lambda x: datetime.fromisoformat(x[0]))
 
   return combined

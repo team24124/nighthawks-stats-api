@@ -9,6 +9,6 @@ import stats.data as data
 from stats.config import config
 
 if __name__ == '__main__':
-    dt = requests.get("http://127.0.0.1:5000/api/info/").json()
-    print(dt['last_updated'])
-    print(datetime.datetime.strptime(dt['last_updated'], '%a, %d %b %Y %H:%M:%S -0000').date())
+    x = opr_epa.calculate_event_epa_opr("CAABCMP", "CAAB")
+    for team in x.values():
+        print(f"{team.team_number} {team.games_played}")
