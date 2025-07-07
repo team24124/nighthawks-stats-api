@@ -14,6 +14,13 @@ class MetaData(Resource):
     def get(self):
         return AppMetaData.query.get(0)
 
+    # @marshal_with(meta_data_fields)
+    # def post(self):
+    #     metadata = AppMetaData(last_updated=datetime.datetime.now())
+    #     db.session.add(metadata)
+    #     db.session.commit()
+    #     return metadata
+
 class Teams(Resource):
     @marshal_with(team_model_fields)
     def get(self):
