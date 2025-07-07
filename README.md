@@ -26,9 +26,10 @@ In order for statistics to work for new seasons, score data needs to be adopted 
 You can change this by:
 1) Cloning the repository (See relevant steps above)
 2) Go to ``nighthawks-stats/stats/config.yaml`` and change the `season` tag to the year of your desired season
-3) Navigating to the following directory: ``nighthawks-stats/stats/score-data/__init__.py``
-4) Adding the relevant year to the *match/case* statement (Ex. 2025 for the 2025 season)
-5) Creating a new *obtain_year_score_data* function like the one already in the file that **MUST** return: 
+3) **If it is early on in the season you will also want to change the `calculate_averages` tag to `True` in order for a new average to be calculated for the season.** After November you can set the flag back to false and enter the new average values into the config.yaml.
+4) Navigating to the following directory: ``nighthawks-stats/stats/score-data/__init__.py``
+5) Adding the relevant year to the *match/case* statement (Ex. 2025 for the 2025 season)
+6) Creating a new *obtain_year_score_data* function like the one already in the file that **MUST** return: 
 - A list of match names
 - A list of Total match scores (with red alliance scores then blue alliance scores per game)
 - A list of Auto scores (with red alliance scores then blue alliance scores per game)
