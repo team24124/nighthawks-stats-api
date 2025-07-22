@@ -118,18 +118,16 @@ def get_epa_parameters(team_red_1: Team, team_red_2: Team, team_blue_1: Team, te
     k = 0.33
     m = 0
 
-    # Use constant k = 0.33 to provide more stable results
-
-    # games_played = (team_red_1.games_played + team_red_2.games_played +
-    #                 team_blue_1.games_played + team_blue_2.games_played) / 4
-    # if 6 < games_played <= 12:
-    #     k = 0.33 - (games_played - 6) / 45
-    # elif 12 < games_played <= 36:
-    #     k = 0.2
-    #     # m = (games_played - 12)/24 # Commented out due to non-defensive nature of this season's game
-    # elif games_played > 36:
-    #     k = 0.2
-    #     # m = 1
+    games_played = (team_red_1.games_played + team_red_2.games_played +
+                    team_blue_1.games_played + team_blue_2.games_played) / 4
+    if 6 < games_played <= 12:
+        k = 0.33 - (games_played - 6) / 45
+    elif 12 < games_played <= 36:
+        k = 0.2
+        # m = (games_played - 12)/24 # Commented out due to non-defensive nature of this season's game
+    elif games_played > 36:
+        k = 0.2
+        # m = 1
 
     return m, k
 

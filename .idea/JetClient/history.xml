@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="History">
+    <option name="requestHistoryStates">
+      <list>
+        <requestHistoryState>
+          <option name="dateTime" value="1751928459591" />
+          <option name="id" value="fde3c528-159c-403e-8b18-f17d542ec00b" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="PATCH" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="ewogICAgImlkIjogMCwKICAgICJsYXN0X3VwZGF0ZWQiOiBudWxsCn0K" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 0,&#10;  &quot;last_updated&quot;: null&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 22:47:39 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="42" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="fde3c528-159c-403e-8b18-f17d542ec00b" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&#10;    &quot;id&quot;: 0,&#10;    &quot;last_updated&quot;: null&#10;}&#10;" />
+              <option name="size" value="42" />
+              <option name="time" value="1609" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751928475695" />
+          <option name="id" value="10587a6e-66e6-4a9d-be6d-2fb9f5cd3524" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="PATCH" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="ewogICAgImlkIjogMCwKICAgICJsYXN0X3VwZGF0ZWQiOiBudWxsCn0K" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 0,&#10;  &quot;last_updated&quot;: null&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 22:47:55 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="42" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="10587a6e-66e6-4a9d-be6d-2fb9f5cd3524" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&#10;    &quot;id&quot;: 0,&#10;    &quot;last_updated&quot;: null&#10;}&#10;" />
+              <option name="size" value="42" />
+              <option name="time" value="1692" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751928796009" />
+          <option name="id" value="3efc48fa-871a-4234-9a7f-502112e0c910" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="PATCH" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="ewogICAgImlkIjogMCwKICAgICJsYXN0X3VwZGF0ZWQiOiBudWxsCn0K" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 0,&#10;  &quot;last_updated&quot;: null&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 22:53:16 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="42" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="3efc48fa-871a-4234-9a7f-502112e0c910" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&#10;    &quot;id&quot;: 0,&#10;    &quot;last_updated&quot;: null&#10;}&#10;" />
+              <option name="size" value="42" />
+              <option name="time" value="284" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751928811754" />
+          <option name="id" value="62885ae8-40a3-4875-b65f-087538b39605" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="PATCH" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="ewogICAgIm1lc3NhZ2UiOiAiVGhlIG1ldGhvZCBpcyBub3QgYWxsb3dlZCBmb3IgdGhlIHJlcXVlc3RlZCBVUkwuIgp9Cg==" />
+              <option name="bodyString" value="{&#10;  &quot;message&quot;: &quot;The method is not allowed for the requested URL.&quot;&#10;}" />
+              <option name="code" value="405" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 22:53:31 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="70" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Allow" />
+                    <option name="value" value="HEAD, OPTIONS, POST, GET" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="62885ae8-40a3-4875-b65f-087538b39605" />
+              <option name="message" value="Method Not Allowed" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&#10;    &quot;message&quot;: &quot;The method is not allowed for the requested URL.&quot;&#10;}&#10;" />
+              <option name="size" value="70" />
+              <option name="time" value="2" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751928816083" />
+          <option name="id" value="f42bd538-a054-4df2-b89a-8ad7c15651f9" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="POST" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="ewogICAgImlkIjogMCwKICAgICJsYXN0X3VwZGF0ZWQiOiBudWxsCn0K" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 0,&#10;  &quot;last_updated&quot;: null&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 22:53:36 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="42" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="f42bd538-a054-4df2-b89a-8ad7c15651f9" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&#10;    &quot;id&quot;: 0,&#10;    &quot;last_updated&quot;: null&#10;}&#10;" />
+              <option name="size" value="42" />
+              <option name="time" value="1719" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751929049623" />
+          <option name="id" value="2a1b90bb-952a-43af-8f3c-5196376b4005" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="POST" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="ewogICAgImlkIjogMSwKICAgICJsYXN0X3VwZGF0ZWQiOiAiTW9uLCAwNyBKdWwgMjAyNSAxNjo1NzoyNyAtMDAwMCIKfQo=" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 1,&#10;  &quot;last_updated&quot;: &quot;Mon, 07 Jul 2025 16:57:27 -0000&quot;&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 22:57:29 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="71" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="2a1b90bb-952a-43af-8f3c-5196376b4005" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&#10;    &quot;id&quot;: 1,&#10;    &quot;last_updated&quot;: &quot;Mon, 07 Jul 2025 16:57:27 -0000&quot;&#10;}&#10;" />
+              <option name="size" value="71" />
+              <option name="time" value="1944" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751929225052" />
+          <option name="id" value="21b7298a-5888-4bcd-8e3b-845bac3f7662" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="GET" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="eyJpZCI6IDAsICJsYXN0X3VwZGF0ZWQiOiBudWxsfQo=" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 0,&#10;  &quot;last_updated&quot;: null&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 23:00:25 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="32" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="21b7298a-5888-4bcd-8e3b-845bac3f7662" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&quot;id&quot;: 0, &quot;last_updated&quot;: null}&#10;" />
+              <option name="size" value="32" />
+              <option name="time" value="280" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751929277907" />
+          <option name="id" value="28a7b791-f5ac-4c81-b693-ac87171effff" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="PATCH" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="eyJtZXNzYWdlIjogIlRoZSBtZXRob2QgaXMgbm90IGFsbG93ZWQgZm9yIHRoZSByZXF1ZXN0ZWQgVVJMLiJ9Cg==" />
+              <option name="bodyString" value="{&#10;  &quot;message&quot;: &quot;The method is not allowed for the requested URL.&quot;&#10;}" />
+              <option name="code" value="405" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 23:01:17 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="64" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Allow" />
+                    <option name="value" value="OPTIONS, HEAD, GET" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="28a7b791-f5ac-4c81-b693-ac87171effff" />
+              <option name="message" value="Method Not Allowed" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&quot;message&quot;: &quot;The method is not allowed for the requested URL.&quot;}&#10;" />
+              <option name="size" value="64" />
+              <option name="time" value="4" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751929288630" />
+          <option name="id" value="785a679e-4734-4e63-b155-b4bda1e99ef2" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="PATCH" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="eyJpZCI6IDAsICJsYXN0X3VwZGF0ZWQiOiAiTW9uLCAwNyBKdWwgMjAyNSAwMDowMDowMCAtMDAwMCJ9Cg==" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 0,&#10;  &quot;last_updated&quot;: &quot;Mon, 07 Jul 2025 00:00:00 -0000&quot;&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 23:01:28 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="61" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="785a679e-4734-4e63-b155-b4bda1e99ef2" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&quot;id&quot;: 0, &quot;last_updated&quot;: &quot;Mon, 07 Jul 2025 00:00:00 -0000&quot;}&#10;" />
+              <option name="size" value="61" />
+              <option name="time" value="1994" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+        <requestHistoryState>
+          <option name="dateTime" value="1751929307050" />
+          <option name="id" value="41888e9e-203f-4e76-97fb-775c71d19d78" />
+          <option name="request">
+            <requestState>
+              <option name="id" value="c2d6342c-1277-4367-a567-0355ac836c32" />
+              <option name="method" value="GET" />
+              <option name="name" value="Draft" />
+              <option name="url" value="http://127.0.0.1:5000/api/info/" />
+            </requestState>
+          </option>
+          <option name="response">
+            <responseState>
+              <option name="bodyBytesBase64" value="eyJpZCI6IDAsICJsYXN0X3VwZGF0ZWQiOiAiTW9uLCAwNyBKdWwgMjAyNSAwMDowMDowMCAtMDAwMCJ9Cg==" />
+              <option name="bodyString" value="{&#10;  &quot;id&quot;: 0,&#10;  &quot;last_updated&quot;: &quot;Mon, 07 Jul 2025 00:00:00 -0000&quot;&#10;}" />
+              <option name="code" value="200" />
+              <option name="connectionEstablishingTime" value="1" />
+              <option name="contentType" value="application/json" />
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Server" />
+                    <option name="value" value="Werkzeug/3.1.3 Python/3.12.7" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Date" />
+                    <option name="value" value="Mon, 07 Jul 2025 23:01:47 GMT" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Content-Length" />
+                    <option name="value" value="61" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Access-Control-Allow-Origin" />
+                    <option name="value" value="*" />
+                  </headerState>
+                  <headerState>
+                    <option name="key" value="Connection" />
+                    <option name="value" value="close" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="41888e9e-203f-4e76-97fb-775c71d19d78" />
+              <option name="message" value="OK" />
+              <option name="prettyResponseType" value="JSON" />
+              <option name="rawBodyString" value="{&quot;id&quot;: 0, &quot;last_updated&quot;: &quot;Mon, 07 Jul 2025 00:00:00 -0000&quot;}&#10;" />
+              <option name="size" value="61" />
+              <option name="time" value="264" />
+            </responseState>
+          </option>
+          <option name="workspaceId" value="drafts" />
+        </requestHistoryState>
+      </list>
+    </option>
+  </component>
+</project>
