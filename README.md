@@ -24,20 +24,15 @@ API_TOKEN=[password]
 In order for statistics to work for new seasons, score data needs to be adopted into the three main categories (Auto, Teleop and Endgame) that FIRST uses.
 
 You can change this by:
-1) Cloning the repository (See relevant steps above)
-2) Go to ``nighthawks-stats/stats/config.yaml`` and change the `season` tag to the year of your desired season
-3) **If it is early on in the season you will also want to change the `calculate_averages` tag to `True` in order for a new average to be calculated for the season.** After November you can set the flag back to false and enter the new average values into the config.yaml.
-4) Navigating to the following directory: ``nighthawks-stats/stats/score-data/__init__.py``
-5) Adding the relevant year to the *match/case* statement (Ex. 2025 for the 2025 season)
-6) Creating a new *obtain_year_score_data* function like the one already in the file that **MUST** return: 
-- A list of match names
-- A list of Total match scores (with red alliance scores then blue alliance scores per game)
-- A list of Auto scores (with red alliance scores then blue alliance scores per game)
-- A list of TeleOp scores (with red alliance scores then blue alliance scores per game)
-- A list of Endgame scores (with red alliance scores then blue alliance scores per game)
+1) Clone the repository using the steps above under **Usage**
+2) Follow the steps in the [stats-calculator repository](https://github.com/team24124/stats-calculator/blob/main/README.md#updating-for-new-seasons) for updating to new seasons in this project.
+2) Follow the steps below on *how to calculate data for all teams at once* in order to **RESET** 
+the previous season's database. **DISCLAIMER: THIS OVERRIDES ALL EXISTING DATA**
 
 
 ## How do I calculate all teams at once?
+**DISCLAIMER: THIS OVERRIDES ALL EXISTING DATA**
+
 You can recalculate statistics and update your database all at once by:
 1) Cloning the repository (See relevant steps above)
 2) Running `run.py` to start a local Flask server
