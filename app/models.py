@@ -7,8 +7,8 @@ from sqlalchemy.types import ARRAY, String, Integer, Float
 from flask_restful import fields
 
 from app import db
-from stats.event import Event
-from stats.team import Team
+from stats.events.Event import Event
+from stats.teams.Team import Team
 
 #from stats.team import Team
 
