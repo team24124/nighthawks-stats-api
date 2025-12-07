@@ -88,12 +88,12 @@ def get_season_score_parser(season: int):
     :param season: FTC API season year
     :return: Valid score parser to process events
     """
-    from stats.data.parsers import IntoTheDeepScoreParser
+    from stats.data.parsers import DecodeScoreParser
 
     # noinspection PyUnreachableCode
     match season:
-        case 2024:
-            return IntoTheDeepScoreParser()
+        case 2025:
+            return DecodeScoreParser()
         case _:
             raise ValueError("The season you tried to look for does not have a designated score parser yet. "
                              "Make sure your desired year is correct or create and add a new season score parser")

@@ -129,10 +129,10 @@ class TeamModel(db.Model):
         self.opr_auto = team.opr_auto
         self.opr_tele = team.opr_tele
         self.opr_end = team.opr_end
-        self.historical_opr = team.opr_total_vals
-        self.historical_auto_opr = team.opr_auto_vals
-        self.historical_tele_opr = team.opr_tele_vals
-        self.historical_end_opr = team.opr_end_vals
+        self.historical_opr = team.historical_opr
+        self.historical_auto_opr = team.historical_auto_opr
+        self.historical_tele_opr = team.historical_tele_opr
+        self.historical_end_opr = team.historical_end_opr
 
     def __repr__(self):
         return f"Team(number={self.team_number},name={self.team_name})"

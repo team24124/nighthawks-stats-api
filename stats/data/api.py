@@ -1,5 +1,4 @@
 import requests
-
 from stats.data import get_auth, get_config
 from stats.teams.Team import Team
 
@@ -11,8 +10,10 @@ def get_team_from_ftc(team_number: int) -> Team:
     :return: Team object without any games played
     """
     season = get_config()['season']
-    team_response = requests.get(f"https://ftc-api.firstinspires.org/v2.0/{season}/teams?teamNumber={team_number}",
-                                 auth=get_auth())
+    team_response = requests.get(
+        f"https://ftc-api.firstinspires.org/v2.0/{season}/teams?teamNumber={team_number}",
+        auth=get_auth()
+    )
 
     if team_response.status_code == 400:
         raise ValueError(f"The team number {team_number} you tried to find does not exist.")
@@ -39,6 +40,7 @@ def get_team_from_nighthawks(team_number: int) -> Team:
     :param team_number: Valid FTC Team Number
     :return: Team object with last updated statistics and games played
     """
+    # Move the import here to avoid circular import
     from stats.teams import get_team_from_json
 
     team_response = requests.get(f"https://nighthawks-stats.vercel.app/api/teams/{team_number}")

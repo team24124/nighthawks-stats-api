@@ -68,7 +68,7 @@ def update_events():
                     print(f"Updating existing team. ({event.event_code})")
                     query.update(event)
 
-        db.session.commit()
+                db.session.commit()
         print("All changes comitted.")
     return "", 204
 
@@ -90,8 +90,9 @@ def update_teams():
                 else:
                     print(f"Updating existing team. ({team.team_number})")
                     query.update(team)
+                    query.update(team)
 
-        db.session.commit()
+                db.session.commit()
         print("All changes comitted.")
     return "", 204
 

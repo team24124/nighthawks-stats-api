@@ -1,51 +1,67 @@
+
 import requests
-from stats.data.scores import SeasonScoreParser, MatchData, AllianceScoreData, EventData
+from stats.data import get_config
+from stats.data.scores import AllianceScoreData, MatchData, EventData
 
-
-class IntoTheDeepScoreParser(SeasonScoreParser):
+class DecodeScoreParser:
     def parse(self, event_code: str) -> EventData:
         from stats.data import get_auth
+        season = get_config()['season']
+        r = requests.get(
+            f"https://ftc-api.firstinspires.org/v2.0/2025/scores/" + event_code + "/qual",
+                                auth=get_auth()
+        )
+        print(r.status_code)
+        print(r.text)
+        data = r.json()
 
-        # Get the scoring data json from the FTC API
-        response = requests.get(f"https://ftc-api.firstinspires.org/v2.0/2024/scores/" + event_code + "/qual",
-                                auth=get_auth())  # only grab from qualifiers to equally compare all teams
-        score_data = response.json()['matchScores']
         event_data = EventData()
 
-        for match_score in score_data:
-            match_level = 'q' if match_score['matchLevel'] == "QUALIFICATION" else "p"
-            match_number = match_score['matchNumber']
+        for match in data['matchScores']:
+            match_number = match['matchNumber']
+            match_level = match['matchLevel'][0].upper()  # Q for qualification, P for playoffs
 
-            red_alliance = match_score['alliances'][1] # Red alliance is the second team in this year's API
-            blue_alliance = match_score['alliances'][0]
+            alliances = match['alliances']
 
-            # Red alliance
-            red_total_score = red_alliance['preFoulTotal']
-            red_auto_score = red_alliance['autoPoints']
-            red_teleop_score = red_alliance['teleopSamplePoints'] + red_alliance['teleopSpecimenPoints']
-            red_endgame_score = red_alliance['teleopPoints'] - red_teleop_score
+            # Find Red and Blue alliance data
+            red_data = next(a for a in alliances if a['alliance'].lower() == 'red')
+            blue_data = next(a for a in alliances if a['alliance'].lower() == 'blue')
 
-            red_alliane_scores = AllianceScoreData(red_total_score, red_auto_score,
-                                                   red_teleop_score, red_endgame_score)
+            # Build AllianceScoreData objects
+            red_scores = AllianceScoreData(
+                total_score=red_data.get('totalPoints', 0),
+                auto_score=(red_data.get('autoArtifactPoints', 0) +red_data.get('autoLeavePoints', 0) + red_data.get('autoPatternPoints', 0)),
+                tele_score=(
+                        red_data.get('teleopArtifactPoints', 0) +
+                        red_data.get('teleopDepotPoints', 0) +
+                        red_data.get('teleopPatternPoints', 0) +
+                        red_data.get('teleopBasePoints', 0)
+                ),
+                end_score=0  # If there’s a separate endgame score, set it; otherwise 0
+            )
 
-            # Then blue alliance
-            blue_total_score = blue_alliance['preFoulTotal']
-            blue_auto_score = blue_alliance['autoPoints']
-            blue_teleop_score = blue_alliance['teleopSamplePoints'] + blue_alliance['teleopSpecimenPoints']
-            blue_endgame_score = blue_alliance['teleopPoints'] - blue_teleop_score
+            blue_scores = AllianceScoreData(
+                total_score=blue_data.get('totalPoints', 0),
+                auto_score=(blue_data.get('autoArtifactPoints', 0) + blue_data.get('autoLeavePoints', 0) + blue_data.get(
+                    'autoPatternPoints', 0)),
+                tele_score=(
+                        blue_data.get('teleopArtifactPoints', 0) +
+                        blue_data.get('teleopDepotPoints', 0) +
+                        blue_data.get('teleopPatternPoints', 0) +
+                        blue_data.get('teleopBasePoints', 0)
+                ),
+                end_score=0
+            )
 
-            blue_alliance_scores = AllianceScoreData(blue_total_score, blue_auto_score,
-                                                     blue_teleop_score, blue_endgame_score)
+            match_obj = MatchData(
+                season=season,
+                event_code=event_code,
+                match_number=match_number,
+                match_level=match_level,
+                red_scores=red_scores,
+                blue_scores=blue_scores
+            )
 
-            # Create our match data object
-            match_data = MatchData(
-                2024,
-                event_code,
-                match_number,
-                match_level,
-                red_alliane_scores,
-                blue_alliance_scores)
-            # And append to the full list
-            event_data.add(match_data)
+            event_data.add(match_obj)
 
         return event_data

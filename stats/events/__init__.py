@@ -35,6 +35,8 @@ def get_event(event_code: str) -> Event:
   if event_response.status_code == 404:
     raise ValueError(f"The event {event_code} you tried to find does not exist.")
 
+  print("STATUS:", event_response.status_code)
+  print("RAW:", event_response.text[:300])
   event_data = event_response.json()['events'][0]
 
   return Event(event_data)
@@ -115,3 +117,4 @@ def get_event_rankings(event_code: str) -> dict[int, int]:
   rankings = {rank['teamNumber']: rank['rank'] for rank in rank_data}
 
   return rankings
+
