@@ -29,7 +29,7 @@ class DecodeScoreParser:
 
             # Build AllianceScoreData objects
             red_scores = AllianceScoreData(
-                total_score=red_data.get('totalPoints', 0),
+                total_score=red_data.get('totalPoints', 0) - blue_data.get('foulPointsCommitted', 0),
                 auto_score=(red_data.get('autoArtifactPoints', 0) +red_data.get('autoLeavePoints', 0) + red_data.get('autoPatternPoints', 0)),
                 tele_score=(
                         red_data.get('teleopArtifactPoints', 0) +
@@ -41,7 +41,7 @@ class DecodeScoreParser:
             )
 
             blue_scores = AllianceScoreData(
-                total_score=blue_data.get('totalPoints', 0),
+                total_score=blue_data.get('totalPoints', 0) - red_data.get('foulPointsCommitted', 0),
                 auto_score=(blue_data.get('autoArtifactPoints', 0) + blue_data.get('autoLeavePoints', 0) + blue_data.get(
                     'autoPatternPoints', 0)),
                 tele_score=(
