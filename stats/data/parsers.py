@@ -34,10 +34,10 @@ class DecodeScoreParser:
                 tele_score=(
                         red_data.get('teleopArtifactPoints', 0) +
                         red_data.get('teleopDepotPoints', 0) +
-                        red_data.get('teleopPatternPoints', 0) +
-                        red_data.get('teleopBasePoints', 0)
+                        red_data.get('teleopPatternPoints', 0)
+
                 ),
-                end_score=0  # If there’s a separate endgame score, set it; otherwise 0
+                end_score=red_data.get('teleopBasePoints', 0)  # If there’s a separate endgame score, set it; otherwise 0
             )
 
             blue_scores = AllianceScoreData(
@@ -47,10 +47,10 @@ class DecodeScoreParser:
                 tele_score=(
                         blue_data.get('teleopArtifactPoints', 0) +
                         blue_data.get('teleopDepotPoints', 0) +
-                        blue_data.get('teleopPatternPoints', 0) +
-                        blue_data.get('teleopBasePoints', 0)
+                        blue_data.get('teleopPatternPoints', 0)
+
                 ),
-                end_score=0
+                end_score=blue_data.get('teleopBasePoints', 0)
             )
 
             match_obj = MatchData(

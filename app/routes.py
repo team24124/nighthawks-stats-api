@@ -54,6 +54,10 @@ def index():
 @app.route('/api/events/calculate')
 def update_events():
     with app.app_context():
+        # delete old event data
+        db.session.query(EventModel).delete()
+        db.session.commit()
+        print("Old Event data cleared.")
         events = get_all_events()
 
         with db.session.no_autoflush:
@@ -75,6 +79,10 @@ def update_events():
 @app.route('/api/teams/calculate')
 def update_teams():
     with app.app_context():
+        # delete old team data first
+        db.session.query(TeamModel).delete()
+        db.session.commit()
+        print("Old team data cleared.")
         #Calculate all statistics
         teams = calculate_all_stats()
 
