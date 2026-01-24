@@ -6,8 +6,9 @@ from app.models import TeamModel, team_model_fields, event_model_fields, EventMo
 
 from app import app, api, db
 from stats.data import parse_date
-from stats.events import get_all_events, Event as EventObj
+from stats.events import get_all_events, Event as EventObj, event_has_teams, get_event_by_code
 from stats.calculations import calculate_all_stats, update_teams_to_date
+from app.models import PendingEventModel
 
 class MetaData(Resource):
     @marshal_with(meta_data_fields)
@@ -54,30 +55,54 @@ def index():
 @app.route('/api/events/calculate')
 def update_events():
     with app.app_context():
-        # delete old event data
+        print("Hard reset: deleting all event data")
+
+        # 1. DELETE EVERYTHING
         db.session.query(EventModel).delete()
+        db.session.query(PendingEventModel).delete()
         db.session.commit()
-        print("Old Event data cleared.")
+
+        print("All event tables cleared")
+
+        # 2. FETCH ALL EVENTS
         events = get_all_events()
+        seen_codes: set[str] = set()
 
-        with db.session.no_autoflush:
-            for event in events:
-                model_obj = EventModel(event)
-                query: EventModel = EventModel.query.filter_by(event_code=event.event_code).first()
+        processed = 0
 
-                if not query:
-                    print(f"Found new event ({event.event_code}), adding to database.")
-                    db.session.add(model_obj)
-                else:
-                    print(f"Updating existing team. ({event.event_code})")
-                    query.update(event)
+        for event in events:
+            code = event.event_code
 
+            # Deduplicate correctly
+            if code in seen_codes:
+                continue
+            seen_codes.add(code)
+
+            if event_has_teams(code):
+                db.session.add(EventModel(event))
+            else:
+                db.session.add(
+                    PendingEventModel(
+                        event_code=code,
+                        first_seen=datetime.datetime.utcnow(),
+                        last_checked=datetime.datetime.utcnow()
+                    )
+                )
+                print(f"{event} has no teams")
+
+            processed += 1
+            if processed % 25 == 0:
                 db.session.commit()
-        print("All changes comitted.")
+
+        db.session.commit()
+        print("Full rebuild complete")
+
     return "", 204
+
 
 @app.route('/api/teams/calculate')
 def update_teams():
+
     with app.app_context():
         # delete old team data first
         db.session.query(TeamModel).delete()
@@ -107,37 +132,97 @@ def update_teams():
 @app.route('/api/cron/update')
 def update_daily():
     with app.app_context():
+        print("Starting incremental update")
+
+        # 1. Get metadata
         metadata = AppMetaData.query.get(0)
+        if not metadata:
+            metadata = AppMetaData(
+                id=0,
+                last_updated=datetime.datetime.utcnow() - datetime.timedelta(days=1)
+            )
+            db.session.add(metadata)
+            db.session.commit()
+
         last_updated = metadata.last_updated
-        new_events, teams = update_teams_to_date(last_updated)
+        now = datetime.datetime.utcnow()
 
-        with db.session.no_autoflush:
-            for event in new_events:
-                event_obj = EventObj(event)
-                model_obj = EventModel(event_obj)
-                query: EventModel = EventModel.query.filter_by(event_code=event_obj.event_code).first()
+        # 2. Get new events only (date-bounded)
+        new_events = get_all_events(last_updated, now)
 
-                if not query:
-                    print(f"Found new event ({event_obj.event_code}), adding to database.")
-                    db.session.add(model_obj)
-                else:
-                    print(f"Updating existing team. ({event_obj.event_code})")
-                    query.update(event_obj)
+        # 3. Load pending events
+        pending_rows = PendingEventModel.query.all()
+        pending_codes = [p.event_code for p in pending_rows]
 
-            for team in teams.values():
-                model_obj = TeamModel(team)
-                query: TeamModel = TeamModel.query.filter_by(team_number=team.team_number).first()
-
-                if not query:
-                    print(f"Found new team ({team.team_number}), adding to database.")
-                    db.session.add(model_obj)
-                else:
-                    print(f"Updating existing team. ({team.team_number})")
-                    query.update(team)
-
-        metadata.last_updated = datetime.datetime.now()
+        # Clear pending table
+        PendingEventModel.query.delete()
         db.session.commit()
+
+        # 4. Merge pending + new events
+        all_event_codes = pending_codes + [e.event_code for e in new_events]
+
+        # Deduplicate while preserving order
+        seen = set()
+        all_event_codes = [
+            code for code in all_event_codes
+            if not (code in seen or seen.add(code))
+        ]
+
+        processed = 0
+
+        for code in all_event_codes:
+            if event_has_teams(code):
+                event = get_event_by_code(code)
+                existing = EventModel.query.filter_by(event_code=code).first()
+
+                if not existing:
+                    db.session.add(EventModel(event))
+                else:
+                    existing.update(event)
+            else:
+                db.session.add(PendingEventModel(
+                    event_code=code,
+                    first_seen=now,
+                    last_checked=now
+                ))
+
+            processed += 1
+            if processed % 10 == 0:
+                db.session.commit()
+
+        # 5. Update metadata timestamp
+        metadata.last_updated = now
+        db.session.commit()
+
+        print("Incremental update complete")
+
     return "", 204
+
+
+
+def process_pending_events():
+    pending_events = PendingEventModel.query.all()
+
+    for pending in pending_events:
+        if not event_has_teams(pending.event_code):
+            pending.last_checked = datetime.datetime.utcnow()
+            continue
+
+        event = get_event_by_code(event_code=pending.event_code)
+        if event is None:
+            continue
+
+        event_obj = EventObj(event[0])
+        model_obj = EventModel(event_obj)
+
+        query = EventModel.query.filter_by(event_code=event_obj.event_code).first()
+        if not query:
+            db.session.add(model_obj)
+        else:
+            query.update(event_obj)
+
+        db.session.delete(pending)
+
 
 api.add_resource(Teams, '/api/teams/')
 api.add_resource(Team, '/api/teams/<int:team_number>/')

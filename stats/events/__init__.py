@@ -4,7 +4,7 @@ import requests
 
 from stats.data import get_config, get_auth
 from stats.events.Event import Event
-
+from stats.teams import get_team_data_from_event, get_teams_at_event
 
 def create_team_list(event_code: str) -> list[int]:
   """
@@ -118,3 +118,22 @@ def get_event_rankings(event_code: str) -> dict[int, int]:
 
   return rankings
 
+
+def event_has_teams(event_code: str) -> bool:
+  try:
+    teams = get_teams_at_event(event_code)
+    return len(teams) > 0
+  except Exception as e:
+    print(f"Error checking teams for event {event_code}: {e}")
+    return False
+
+
+def get_event_by_code(event_code: str):
+  """
+  Return a single Event object matching the given event code, or None if not found
+  """
+  events = get_all_events()
+  for event in events:
+    if event.event_code == event_code:
+      return event
+  return None

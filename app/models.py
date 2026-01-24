@@ -1,4 +1,5 @@
 from datetime import date
+import datetime
 
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -141,3 +142,11 @@ class TeamModel(db.Model):
 class AppMetaData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     last_updated = Column(db.DateTime, nullable=False, default=date.today().isoformat(), onupdate=date.today().isoformat())
+
+
+class PendingEventModel(db.Model):
+    __tablename__ = "pending_events"
+
+    event_code = db.Column(db.String, primary_key=True)
+    first_seen = db.Column(db.DateTime, nullable=False)
+    last_checked = db.Column(db.DateTime, nullable=True)
