@@ -168,6 +168,7 @@ def update_daily():
             if not (code in seen or seen.add(code))
         ]
 
+
         processed = 0
 
         for code in all_event_codes:

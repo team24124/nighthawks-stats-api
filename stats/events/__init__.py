@@ -128,6 +128,7 @@ def event_has_teams(event_code: str) -> bool:
     return False
 
 
+
 def get_event_by_code(event_code: str):
   """
   Return a single Event object matching the given event code, or None if not found

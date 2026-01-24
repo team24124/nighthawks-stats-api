@@ -150,3 +150,4 @@ class PendingEventModel(db.Model):
     event_code = db.Column(db.String, primary_key=True)
     first_seen = db.Column(db.DateTime, nullable=False)
     last_checked = db.Column(db.DateTime, nullable=True)
+
