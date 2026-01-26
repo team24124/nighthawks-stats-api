@@ -12,6 +12,8 @@ from stats.events import get_all_events
 from stats.events.Event import Event
 from stats.teams import get_team_data_from_events
 from stats.teams.Team import Team
+from app.models import PendingEventModel
+from stats.events import event_has_teams, get_event_by_code
 
 
 def calculate_all_stats():
@@ -33,21 +35,59 @@ def calculate_epa_opr(events: list[Event]):
 
 def update_teams_to_date(last_updated: datetime):
     """
-    Updates existing team data to the latest day given a last updated date
-    :param last_updated: Python datetime representing the last time a set of team data was updated
-    :return: A tuple containing a list of new events and updated team data as a dictionary of team numbers and team data
+    Finds all new events since last_updated, retries pending events,
+    updates team stats, and returns:
+      - valid events
+      - updated teams
+      - still-pending events
     """
-    new_events = get_all_events(min_date=last_updated.date(), max_date=datetime.today().date())
-    event_codes = [event.event_code for event in new_events]
+
+    # 1. Fetch ONLY new events
+    new_events = get_all_events(
+        min_date=last_updated.date(),
+        max_date=datetime.today().date()
+    )
+    print("fetched only new events")
+
+    # 2. Load pending events and resolve them to Event objects
+    pending_rows = PendingEventModel.query.all()
+    print(pending_rows)
+    pending_events = []
+    print("looking a pending events")
+    for row in pending_rows:
+        event = get_event_by_code(row.event_code)
+        if event:
+            pending_events.append(event)
+        print(row)
+    print("merging events")
+    # 3. Merge + deduplicate by event_code
+    all_events = {}
+    for event in new_events + pending_events:
+        all_events[event.event_code] = event
+
+    valid_events = []
+    still_pending = []
+    print("validating events")
+    # 4. Validate events
+    for event in all_events.values():
+        if event_has_teams(event.event_code):
+            valid_events.append(event)
+        else:
+            still_pending.append(event)
+
+    # 5. Update team stats USING ONLY valid events
+    event_codes = [e.event_code for e in valid_events]
 
     avg_total, avg_auto, avg_tele = get_start_avg()
     team_data = get_team_data_from_events(event_codes)
-
-    for event in new_events:
-        print(event.event_code)
+    print("Updating teams")
+    for event in valid_events:
         update_teams_at_event(event, team_data, avg_total, avg_auto, avg_tele)
 
-    return new_events, team_data
+    # 6. Return everything (this is the key change)
+    return valid_events, team_data, still_pending
+
+
 
 
 
