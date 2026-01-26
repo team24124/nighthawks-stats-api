@@ -128,13 +128,36 @@ def event_has_teams(event_code: str) -> bool:
     return False
 
 
-
 def get_event_by_code(event_code: str):
   """
-  Return a single Event object matching the given event code, or None if not found
+  Fetch a single event from the FTC API by event code
+  and return it as an Event object, or None if invalid.
   """
-  events = get_all_events()
-  for event in events:
-    if event.event_code == event_code:
-      return event
-  return None
+  from stats.events.Event import Event
+
+  config = get_config()
+  season = config['season']
+  valid_events = config['allowed_events']
+
+  # FTC API endpoint for a single event
+  response = requests.get(
+    f"http://ftc-api.firstinspires.org/v2.0/{season}/events/{event_code}",
+    auth=get_auth()
+  )
+
+  if response.status_code != 200:
+    return None
+
+  event_data = response.json().get("events", [])
+  if not event_data:
+    return None
+
+  event_data = event_data[0]
+
+  # Filter by allowed event types
+  event_type = int(event_data.get("type", -1))
+  if event_type not in valid_events:
+    return None
+
+  return Event(event_data)
+

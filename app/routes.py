@@ -99,105 +99,79 @@ def update_events():
 
     return "", 204
 
-
 @app.route('/api/teams/calculate')
 def update_teams():
-
     with app.app_context():
-        # delete old team data first
+        print("Hard reset: recalculating all teams")
+
         db.session.query(TeamModel).delete()
         db.session.commit()
-        print("Old team data cleared.")
-        #Calculate all statistics
+
         teams = calculate_all_stats()
 
-        # Loop through all teams and add/update teams
-        with db.session.no_autoflush:
-            for team in teams.values():
-                model_obj = TeamModel(team)
-                query: TeamModel = TeamModel.query.filter_by(team_number=team.team_number).first()
+        for team in teams.values():
+            db.session.add(TeamModel(team))
 
-                if not query:
-                    print(f"Found new team ({team.team_number}), adding to database.")
-                    db.session.add(model_obj)
-                else:
-                    print(f"Updating existing team. ({team.team_number})")
-                    query.update(team)
-                    query.update(team)
+        db.session.commit()
+        print("Team rebuild complete")
 
-                db.session.commit()
-        print("All changes comitted.")
     return "", 204
+
 
 @app.route('/api/cron/update')
 def update_daily():
     with app.app_context():
-        print("Starting incremental update")
 
-        # 1. Get metadata
+        # 1. Load metadata
         metadata = AppMetaData.query.get(0)
         if not metadata:
-            metadata = AppMetaData(
-                id=0,
-                last_updated=datetime.datetime.utcnow() - datetime.timedelta(days=1)
-            )
+            metadata = AppMetaData(id=0, last_updated=datetime.datetime.min)
             db.session.add(metadata)
             db.session.commit()
-
         last_updated = metadata.last_updated
-        now = datetime.datetime.utcnow()
 
-        # 2. Get new events only (date-bounded)
-        new_events = get_all_events(last_updated, now)
+        # 2. Do ALL heavy logic in one place
+        valid_events, teams, pending_events = update_teams_to_date(last_updated)
+        # 3. Clear pending table
+        db.session.query(PendingEventModel).delete()
+        # 4. Upsert events
+        with db.session.no_autoflush:
+            for event in valid_events:
+                model = EventModel(event)
+                existing = EventModel.query.filter_by(
+                    event_code=event.event_code
+                ).first()
 
-        # 3. Load pending events
-        pending_rows = PendingEventModel.query.all()
-        pending_codes = [p.event_code for p in pending_rows]
-
-        # Clear pending table
-        PendingEventModel.query.delete()
-        db.session.commit()
-
-        # 4. Merge pending + new events
-        all_event_codes = pending_codes + [e.event_code for e in new_events]
-
-        # Deduplicate while preserving order
-        seen = set()
-        all_event_codes = [
-            code for code in all_event_codes
-            if not (code in seen or seen.add(code))
-        ]
-
-
-        processed = 0
-
-        for code in all_event_codes:
-            if event_has_teams(code):
-                event = get_event_by_code(code)
-                existing = EventModel.query.filter_by(event_code=code).first()
-
-                if not existing:
-                    db.session.add(EventModel(event))
-                else:
+                if existing:
                     existing.update(event)
-            else:
+                else:
+                    db.session.add(model)
+
+            # 5. Insert still-pending events
+            for event in pending_events:
                 db.session.add(PendingEventModel(
-                    event_code=code,
-                    first_seen=now,
-                    last_checked=now
+                    event_code=event.event_code,
+                    first_seen=datetime.datetime.utcnow(),
+                    last_checked=datetime.datetime.utcnow()
                 ))
+            # 6. Upsert teams
+            for team in teams.values():
+                model = TeamModel(team)
+                existing = TeamModel.query.filter_by(
+                    team_number=team.team_number
+                ).first()
 
-            processed += 1
-            if processed % 10 == 0:
-                db.session.commit()
+                if existing:
+                    existing.update(team)
+                else:
+                    db.session.add(model)
 
-        # 5. Update metadata timestamp
-        metadata.last_updated = now
+        # 7. Update metadata
+        metadata.last_updated = datetime.datetime.utcnow()
         db.session.commit()
-
-        print("Incremental update complete")
 
     return "", 204
+
 
 
 
