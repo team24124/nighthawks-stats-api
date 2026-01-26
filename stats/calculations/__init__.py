@@ -32,7 +32,7 @@ def calculate_epa_opr(events: list[Event]):
 
     return team_data
 
-
+'''
 def update_teams_to_date(last_updated: datetime):
     """
     Finds all new events since last_updated, retries pending events,
@@ -86,6 +86,36 @@ def update_teams_to_date(last_updated: datetime):
 
     # 6. Return everything (this is the key change)
     return valid_events, team_data, still_pending
+'''
+def update_teams_to_date(last_updated, pending_event_codes: list[str]):
+
+    # fetch only new events
+    new_events = get_all_events(
+        min_date=last_updated.date(),
+        max_date=datetime.today().date()
+    )
+
+    # prepend pending events
+    pending_events = [get_event_by_code(code) for code in pending_event_codes]
+    all_events = pending_events + new_events
+
+    valid_events = []
+    still_pending = []
+
+    for event in all_events:
+        if not event:
+            continue
+
+        if event_has_teams(event.event_code):
+            valid_events.append(event)
+        else:
+            still_pending.append(event.event_code)
+
+    # 🔥 team calculation happens here
+    teams = calculate_teams_from_events(valid_events)
+
+    return valid_events, teams, still_pending
+
 
 
 
@@ -161,3 +191,17 @@ def create_game_matrix(event_code: str, team_list: list[int]):
         game_matrix.append(blue_allainces)
 
     return game_matrix
+
+def calculate_teams_from_events(events: list):
+    if not events:
+        return {}
+
+    event_codes = [e.event_code for e in events]
+
+    avg_total, avg_auto, avg_tele = get_start_avg()
+    team_data = get_team_data_from_events(event_codes)
+
+    for event in events:
+        update_teams_at_event(event, team_data, avg_total, avg_auto, avg_tele)
+
+    return team_data

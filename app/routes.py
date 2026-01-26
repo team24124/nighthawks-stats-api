@@ -117,61 +117,52 @@ def update_teams():
 
     return "", 204
 
-
 @app.route('/api/cron/update')
 def update_daily():
     with app.app_context():
 
-        # 1. Load metadata
         metadata = AppMetaData.query.get(0)
-        if not metadata:
-            metadata = AppMetaData(id=0, last_updated=datetime.datetime.min)
-            db.session.add(metadata)
-            db.session.commit()
         last_updated = metadata.last_updated
 
-        # 2. Do ALL heavy logic in one place
-        valid_events, teams, pending_events = update_teams_to_date(last_updated)
-        # 3. Clear pending table
-        db.session.query(PendingEventModel).delete()
-        # 4. Upsert events
-        with db.session.no_autoflush:
-            for event in valid_events:
-                model = EventModel(event)
-                existing = EventModel.query.filter_by(
-                    event_code=event.event_code
-                ).first()
+        # 1. Pull pending event codes
+        pending_rows = PendingEventModel.query.all()
+        pending_codes = [row.event_code for row in pending_rows]
 
-                if existing:
-                    existing.update(event)
-                else:
-                    db.session.add(model)
+        # 2. Clear pending table immediately
+        PendingEventModel.query.delete()
+        db.session.commit()
 
-            # 5. Insert still-pending events
-            for event in pending_events:
-                db.session.add(PendingEventModel(
-                    event_code=event.event_code,
-                    first_seen=datetime.datetime.utcnow(),
-                    last_checked=datetime.datetime.utcnow()
-                ))
-            # 6. Upsert teams
-            for team in teams.values():
-                model = TeamModel(team)
-                existing = TeamModel.query.filter_by(
-                    team_number=team.team_number
-                ).first()
+        # 3. Do ALL heavy work without DB
+        valid_events, teams, still_pending = update_teams_to_date(
+            last_updated,
+            pending_codes
+        )
 
-                if existing:
-                    existing.update(team)
-                else:
-                    db.session.add(model)
+        # 4. Commit events
+        for event in valid_events:
+            if not EventModel.query.filter_by(event_code=event.event_code).first():
+                db.session.add(EventModel(event))
 
-        # 7. Update metadata
+        # 5. Commit pending events
+        for code in still_pending:
+            db.session.add(PendingEventModel(
+                event_code=code,
+                first_seen=datetime.datetime.utcnow(),
+                last_checked=datetime.datetime.utcnow()
+            ))
+
+        # 6. Commit teams
+        for team in teams.values():
+            existing = TeamModel.query.filter_by(team_number=team.team_number).first()
+            if existing:
+                existing.update(team)
+            else:
+                db.session.add(TeamModel(team))
+
         metadata.last_updated = datetime.datetime.utcnow()
         db.session.commit()
 
     return "", 204
-
 
 
 
