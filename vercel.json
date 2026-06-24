@@ -5,7 +5,11 @@
   "crons": [
     {
       "path": "/api/cron/update",
-      "schedule": "0 0 * * *"
+      "schedule": "0 * * * 5,6,0"
+    },
+    {
+      "path": "/api/cron/update",
+      "schedule": "0 0 * * 1,2,3,4"
     }
   ]
 }
