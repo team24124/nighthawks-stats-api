@@ -234,10 +234,33 @@ class EventScores(Resource):
             return {"error": str(e), "matchScores": []}, 200
 
 
+class EventSchedule(Resource):
+    def get(self, event_code):
+        import requests
+        from stats.data import get_config, get_auth
+        try:
+            config = get_config()
+            season = config['season'] if config else 2025
+            auth = get_auth()
+            url = f"https://ftc-api.firstinspires.org/v2.0/{season}/schedule/{event_code}?tournamentLevel=qual"
+            response = requests.get(url, auth=auth, timeout=10)
+            if response.status_code != 200:
+                return {
+                    "schedule": [],
+                    "error": f"FIRST API returned status {response.status_code}",
+                    "url": url,
+                    "response_text": response.text
+                }, 200
+            return response.json(), 200
+        except Exception as e:
+            return {"error": str(e), "schedule": []}, 200
+
+
 api.add_resource(Teams, '/api/teams/')
 api.add_resource(Team, '/api/teams/<int:team_number>/')
 api.add_resource(Events, '/api/events/')
 api.add_resource(Event, '/api/events/<string:event_code>/')
 api.add_resource(EventMatches, '/api/events/<string:event_code>/matches/')
 api.add_resource(EventScores, '/api/events/<string:event_code>/scores/')
+api.add_resource(EventSchedule, '/api/events/<string:event_code>/schedule/')
 api.add_resource(MetaData, '/api/info/')
