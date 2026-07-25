@@ -83,7 +83,7 @@ def update_events():
             else:
                 db.session.add(
                     PendingEventModel(
-                        event_code=code
+                        event_code=code,
                         first_seen=datetime.datetime.utcnow(),
                         last_checked=datetime.datetime.utcnow()
                     )
