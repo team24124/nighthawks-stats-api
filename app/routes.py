@@ -201,7 +201,12 @@ class EventMatches(Resource):
             url = f"https://ftc-api.firstinspires.org/v2.0/{season}/matches/{event_code}?tournamentLevel=qual"
             response = requests.get(url, auth=auth, timeout=10)
             if response.status_code != 200:
-                return {"matches": []}, 200
+                return {
+                    "matches": [],
+                    "error": f"FIRST API returned status {response.status_code}",
+                    "url": url,
+                    "response_text": response.text
+                }, 200
             return response.json(), 200
         except Exception as e:
             return {"error": str(e), "matches": []}, 500
