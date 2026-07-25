@@ -209,7 +209,7 @@ class EventMatches(Resource):
                 }, 200
             return response.json(), 200
         except Exception as e:
-            return {"error": str(e), "matches": []}, 500
+            return {"error": str(e), "matches": []}, 200
 
 
 class EventScores(Resource):
@@ -231,7 +231,7 @@ class EventScores(Resource):
                 }, 200
             return response.json(), 200
         except Exception as e:
-            return {"error": str(e), "matchScores": []}, 500
+            return {"error": str(e), "matchScores": []}, 200
 
 
 api.add_resource(Teams, '/api/teams/')
